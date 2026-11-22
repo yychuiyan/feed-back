@@ -4,10 +4,10 @@
 实现并验证静态反馈站点，支持需求/问题、只读处理结果和最新排序，部署 GitHub Pages。
 
 ## Next Step
-移动端、昵称记忆和唯一编号已发布并完成线上验证。
+用户已授权检查后提交发布；完成验证并发布前端与 Worker。
 
 ## Current Phase
-Phase 6
+Phase 11
 
 ## Phases
 
@@ -43,6 +43,36 @@ Phase 6
 - [x] Add optional remembered nickname, browser visitor UUID and visible feedback ID
 - [x] Verify compatibility, browser persistence and deploy
 - **Status:** complete
+
+### Phase 7: Compact introduction and attachment preview
+- [x] Replace tall introduction with one line and rename site
+- [x] Add attachment previews for selected and submitted files
+- [x] Add site selector below nickname and persist it in Markdown
+- [x] Verify desktop/mobile locally; do not publish
+- **Status:** complete
+
+### Phase 8: Site picker with icons
+- [x] Use existing app/site icons and a network glyph
+- [x] Replace native select with accessible custom menu
+- [x] Verify selection, keyboard and mobile locally; do not publish
+- **Status:** complete
+
+### Phase 9: Stacked site and type
+- [x] Place type dropdown below site on a separate row
+- [x] Add Other type and rename blog with legacy compatibility
+- [x] Verify narrow screens, picker resets and persistence locally
+- **Status:** complete
+
+### Phase 10: Compact feedback IDs
+- [x] Keep ID and copy action on one line with ellipsis
+- [x] Show complete ID in a click bubble and verify locally
+- **Status:** complete
+
+### Phase 11: Review and publish
+- [ ] Review pending changes and run clean install, tests, build and Worker checks
+- [ ] Commit and publish frontend and submission API
+- [ ] Verify production submission, previews and cleanup test data
+- **Status:** in_progress
 
 ## Decisions Made
 | Decision | Rationale |

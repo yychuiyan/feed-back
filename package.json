@@ -1,1 +1,1 @@
-{"name":"feed-back","version":"1.0.0","private":true,"type":"module","scripts":{"build":"node scripts/build.mjs","test":"node --test","dev":"node scripts/dev.mjs","deploy:api":"wrangler deploy"},"devDependencies":{"wrangler":"^4.166.0"}}
+{"name":"feed-back","version":"1.0.0","private":true,"type":"module","scripts":{"build":"node scripts/build.mjs","test":"node --test","dev":"node scripts/dev.mjs","deploy:api":"wrangler deploy"},"devDependencies":{"wrangler":"^4.166.0"},"dependencies":{"pdfjs-dist":"^6.5.438"}}
