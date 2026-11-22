@@ -34,6 +34,7 @@ const typeItems=[
 ];
 function setupPicker(prefix,items){
   const container=$(`#${prefix}-select`),trigger=$(`#${prefix}-trigger`),menu=$(`#${prefix}-options`),input=$(`#${prefix}`);
+  const placeholder=prefix==='site'?'请选择站点':'请选择类型';
   let active=0,typeahead='',timer;
   function iconFor(item){
     const icon=element(item.icon?'img':'span',`site-icon ${item.icon?'':`type-icon ${item.tone}`}`);
@@ -59,10 +60,18 @@ function setupPicker(prefix,items){
     const item=items[index];input.value=item.name;$(`#${prefix}-value`).textContent=item.name;trigger.title=item.name;
     const icon=iconFor(item);icon.id=`${prefix}-icon`;$(`#${prefix}-icon`).replaceWith(icon);
     for(const [i,option] of [...menu.children].entries())option.setAttribute('aria-selected',String(i===index));
+    trigger.setAttribute('aria-invalid','false');
+  }
+  function resetSelection(){
+    input.value='';$(`#${prefix}-value`).textContent=placeholder;trigger.removeAttribute('title');
+    const icon=element('span',`site-icon site-placeholder${prefix==='type'?' type-icon':''}`,prefix==='site'?'⌖':'◇');
+    icon.id=`${prefix}-icon`;icon.setAttribute('aria-hidden','true');$(`#${prefix}-icon`).replaceWith(icon);
+    for(const option of menu.children)option.setAttribute('aria-selected','false');
+    trigger.removeAttribute('aria-invalid');
   }
   for(const [index,item] of items.entries()){
     const option=element('div','site-option');option.id=`${prefix}-option-${index}`;
-    option.setAttribute('role','option');option.setAttribute('aria-selected',String(index===0));
+    option.setAttribute('role','option');option.setAttribute('aria-selected',String(item.name===input.value));
     const check=element('span','site-check','✓');check.setAttribute('aria-hidden','true');
     option.append(iconFor(item),element('span','site-option-name',item.name),check);menu.append(option);
     option.addEventListener('pointerdown',event=>event.preventDefault());
@@ -89,7 +98,8 @@ function setupPicker(prefix,items){
   document.addEventListener('pointerdown',event=>{if(!container.contains(event.target))close();});
   trigger.addEventListener('blur',close);
   window.addEventListener('resize',close);
-  $('#feedback-form').addEventListener('reset',()=>{select(0);close();});
+  resetSelection();
+  $('#feedback-form').addEventListener('reset',()=>{resetSelection();close();});
 }
 setupPicker('site',siteItems);
 setupPicker('type',typeItems);
@@ -282,6 +292,14 @@ $('#refresh').onclick=load;
 $('#feedback-form').addEventListener('submit',async event=>{
   event.preventDefault();if(busy)return;
   if(processingFiles)return message('图片正在压缩，请稍候再提交。','info');
+  if(!$('#site').value){
+    $('#site-trigger').setAttribute('aria-invalid','true');$('#site-trigger').focus();
+    return message('请选择站点。');
+  }
+  if(!$('#type').value){
+    $('#type-trigger').setAttribute('aria-invalid','true');$('#type-trigger').focus();
+    return message('请选择类型。');
+  }
   if(!$('#description').value.trim())return message('请先填写反馈描述。');
   if(!config.apiUrl)return message('匿名提交服务尚未启用，请稍后再试。已填写的内容会保留在当前页面。');
   busy=true;$('#submit-button').disabled=true;$('#submit-button').textContent='正在提交…';showFiles();message('');

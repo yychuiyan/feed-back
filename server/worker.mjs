@@ -50,7 +50,7 @@ export default {
       const description=form.get('description'),type=form.get('type');
       if(typeof description!=='string'||!description.trim()||description.length>5000)throw new HttpError(400,'请填写 1–5000 个字符的反馈描述');
       if(!types.includes(type))throw new HttpError(400,'请选择需求、问题或其他');
-      let site=form.get('site')??'拾萤';
+      let site=form.get('site')??'';
       if(site==='个人博客')site='炊烟小站';
       if(!sites.includes(site))throw new HttpError(400,'请选择有效的站点');
       const nickname=form.get('nickname')??'';

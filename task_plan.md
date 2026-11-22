@@ -92,6 +92,12 @@ Complete
 - [x] Verify production submission latency and remove diagnostic records
 - **Status:** complete
 
+### Phase 15: Required empty selectors
+- [x] Start site and type selectors empty
+- [x] Require both selections in the browser and Worker
+- [x] Verify mobile layout and production validation
+- **Status:** complete
+
 ## Decisions Made
 | Decision | Rationale |
 |----------|-----------|

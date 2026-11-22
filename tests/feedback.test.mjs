@@ -4,7 +4,7 @@ import {fromMarkdown,toMarkdown} from '../scripts/records.mjs';
 import worker,{saveRecord} from '../server/worker.mjs';
 const record={id:'fb-test',type:'问题',status:'待处理',reason:'',createdAt:'2026-11-22T00:00:00Z',description:'操作失败\n\n---\n<script>alert(1)</script>',attachments:[]};
 const env={GITHUB_TOKEN:'test-only',GITHUB_REPOSITORY:'owner/repo',ALLOWED_ORIGINS:'https://example.com',SUBMISSION_LIMITER:{limit:async()=>({success:true})}};
-function request(fields={},attachment){const form=new FormData();form.set('description','反馈');form.set('type','需求');for(const [k,v] of Object.entries(fields))form.set(k,v);if(attachment)form.append('attachments',attachment,'danger.html');return new Request('https://api.example.com/feedback',{method:'POST',headers:{Origin:'https://example.com'},body:form});}
+function request(fields={},attachment){const form=new FormData();form.set('description','反馈');form.set('site','拾萤');form.set('type','需求');for(const [k,v] of Object.entries(fields))form.set(k,v);if(attachment)form.append('attachments',attachment,'danger.html');return new Request('https://api.example.com/feedback',{method:'POST',headers:{Origin:'https://example.com'},body:form});}
 test('Markdown preserves multiline text and ignores body delimiters',()=>assert.deepEqual(fromMarkdown(toMarkdown(record)),record));
 test('declined feedback requires a reason',()=>assert.throws(()=>toMarkdown({...record,status:'无需处理'}),/原因/));
 test('disallows attachment traversal paths',()=>assert.throws(()=>toMarkdown({...record,attachments:[{name:'x',path:'attachments/fb-test/../../x'}]}),/路径/));
@@ -53,6 +53,11 @@ test('rejects malformed visitor ID and oversized nickname',async()=>{
 test('rejects unrecognized site values',async()=>{
  assert.equal((await worker.fetch(request({site:'未知站点'}),env)).status,400);
  assert.throws(()=>toMarkdown({...record,site:'未知站点'}),/站点/);
+});
+
+test('requires an explicit site and type',async()=>{
+ assert.equal((await worker.fetch(request({site:''}),env)).status,400);
+ assert.equal((await worker.fetch(request({type:''}),env)).status,400);
 });
 
 test('legacy blog records display the renamed site',()=>{
