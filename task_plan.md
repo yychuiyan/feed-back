@@ -4,7 +4,7 @@
 实现并验证静态反馈站点，支持需求/问题、只读处理结果和最新排序，部署 GitHub Pages。
 
 ## Next Step
-已完成发布验收与反馈清理，后续按需维护真实反馈记录。
+下拉标题误触和反馈记录查询已实现并验证，后续按需维护真实反馈记录。
 
 ## Current Phase
 Complete
@@ -72,6 +72,12 @@ Complete
 - [x] Review pending changes and run clean install, tests, build and Worker checks
 - [x] Commit and publish frontend and submission API
 - [x] Verify production submission, previews and cleanup test data
+- **Status:** complete
+
+### Phase 12: Picker labels and feedback query
+- [x] Stop site and type titles from opening their dropdowns
+- [x] Add feedback record query with a visible query button and clear action
+- [x] Verify desktop/mobile layout, empty results and unchanged picker behavior
 - **Status:** complete
 
 ## Decisions Made

@@ -1,7 +1,8 @@
 import {loadProfile, rememberProfile} from './profile.js';
+import {matchesQuery} from './search.js';
 const config = window.FEEDBACK_CONFIG;
 const $ = selector => document.querySelector(selector);
-let records = [], files = [], activeStatus = '全部', busy = false;
+let records = [], files = [], activeStatus = '全部', activeQuery = '', busy = false;
 const maxBytes = 10 * 1024 * 1024;
 const allowed = /\.(png|jpe?g|webp|gif|pdf|txt|log|zip)$/i;
 let storage;
@@ -205,8 +206,14 @@ document.addEventListener('focusin',event=>{if(activeIdPreview&&!activeIdPreview
 function render() {
   closeIdPreview();
   $('#total-count').textContent=records.length;
-  const visible=records.filter(r=>activeStatus==='全部'||r.status===activeStatus).sort((a,b)=>Date.parse(b.createdAt)-Date.parse(a.createdAt));
-  if(!visible.length){const empty=element('div','empty');empty.append(element('div','empty-icon','≡'),element('strong','',records.length?'暂时没有这类反馈':'还没有反馈，来写下第一条吧'),element('p','',records.length?'切换其他处理结果，查看反馈记录。':'你的问题和建议，会在这里留下记录。'));$('#feedback-list').replaceChildren(empty);return;}
+  const searched=records.filter(record=>matchesQuery(record,activeQuery));
+  const visible=searched.filter(r=>activeStatus==='全部'||r.status===activeStatus).sort((a,b)=>Date.parse(b.createdAt)-Date.parse(a.createdAt));
+  $('#list-summary').textContent=activeQuery?`找到 ${visible.length} 条`:'最新提交在前';
+  if(!visible.length){
+    const empty=element('div','empty'),searching=Boolean(activeQuery);
+    empty.append(element('div','empty-icon','≡'),element('strong','',searching?'没有找到匹配记录':records.length?'暂时没有这类反馈':'还没有反馈，来写下第一条吧'),element('p','',searching?'请尝试其他关键词，或清除查询条件。':records.length?'切换其他处理结果，查看反馈记录。':'你的问题和建议，会在这里留下记录。'));
+    $('#feedback-list').replaceChildren(empty);return;
+  }
   $('#feedback-list').replaceChildren(...visible.map(record=>{
     const card=element('article','feedback-card'),top=element('div','record-top'),meta=element('div','record-meta');
     const date=new Date(record.createdAt);const time=element('time','',new Intl.DateTimeFormat('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(date));time.dateTime=record.createdAt;
@@ -231,6 +238,15 @@ function render() {
     return card;
   }));
 }
+function applyRecordQuery(){
+  activeQuery=$('#record-query').value.trim();
+  $('#clear-query').hidden=!activeQuery;
+  render();
+}
+$('#record-search-form').addEventListener('submit',event=>{event.preventDefault();applyRecordQuery();});
+$('#clear-query').onclick=()=>{
+  activeQuery='';$('#record-query').value='';$('#clear-query').hidden=true;render();$('#record-query').focus();
+};
 async function load() {
   $('#refresh').disabled=true;$('#list-message').textContent='正在加载反馈…';
   try {
