@@ -13,3 +13,6 @@
 
 - 补充成功 POST 测试，验证强制待处理、Markdown 与附件字节，合计 9 项测试通过。
 - Worker dry-run 与正式部署成功；本地浏览器无控制台错误。
+
+- GitHub Pages 部署成功；https://docs.yychuiyan.com/feed-back/ 返回 HTTP 200，标题正确。
+- 页面和 API 已发布；真实匿名提交等待专用 GitHub token，之后还需执行真实提交验收。
