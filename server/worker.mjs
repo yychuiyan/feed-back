@@ -50,12 +50,16 @@ export default {
       const description=form.get('description'),type=form.get('type');
       if(typeof description!=='string'||!description.trim()||description.length>5000)throw new HttpError(400,'请填写 1–5000 个字符的反馈描述');
       if(!['需求','问题'].includes(type))throw new HttpError(400,'请选择需求或问题');
+      const nickname=form.get('nickname')??'';
+      if(typeof nickname!=='string'||nickname.trim().length>20||/[\u0000-\u001f\u007f]/.test(nickname))throw new HttpError(400,'昵称最多 20 个字符，不能包含换行等控制字符');
+      const visitorId=form.get('visitorId')||crypto.randomUUID();
+      if(typeof visitorId!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(visitorId))throw new HttpError(400,'访客编号格式不正确，请刷新页面后重试');
       const files=form.getAll('attachments');
       if(files.length>MAX_FILES||files.some(f=>typeof f==='string'))throw new HttpError(400,'最多上传 5 个附件');
       if(files.reduce((sum,f)=>sum+f.size,0)>MAX_SIZE)throw new HttpError(413,'附件总大小不能超过 10 MB');
       const id=`fb-${crypto.randomUUID()}`;
       const uploads=files.map((file,index)=>{const ext=file.name.split('.').pop().toLowerCase();if(!extensions.has(ext))throw new HttpError(400,'附件格式不支持');return {file,path:`attachments/${id}/${index+1}.${ext}`};});
-      const record={id,type,status:'待处理',reason:'',createdAt:new Date().toISOString(),description:description.trim(),attachments:uploads.map(u=>({name:u.file.name.slice(0,200),path:u.path,size:u.file.size}))};
+      const record={id,type,nickname:nickname.trim(),visitorId,status:'待处理',reason:'',createdAt:new Date().toISOString(),description:description.trim(),attachments:uploads.map(u=>({name:u.file.name.slice(0,200),path:u.path,size:u.file.size}))};
       await saveRecord(env,record,uploads);
       return json(record,201);
     }catch(error){return json({error:error instanceof HttpError?error.message:'提交失败，请稍后重试。'},error instanceof HttpError?error.status:500);}

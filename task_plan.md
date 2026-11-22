@@ -4,10 +4,10 @@
 实现并验证静态反馈站点，支持需求/问题、只读处理结果和最新排序，部署 GitHub Pages。
 
 ## Next Step
-匿名提交、Markdown 与附件持久化、自动发布均已验收，清理测试记录后交付。
+实现昵称记忆、访客标识和反馈编号，检查移动端并发布。
 
 ## Current Phase
-Phase 5
+Phase 6
 
 ## Phases
 
@@ -37,6 +37,12 @@ Phase 5
 - [x] Configure dedicated GitHub token and verify production submission
 - [x] Deliver to user
 - **Status:** complete
+
+### Phase 6: Mobile and visitor identity
+- [ ] Improve narrow-screen form, upload, filters and feedback cards
+- [ ] Add optional remembered nickname, browser visitor UUID and visible feedback ID
+- [ ] Verify compatibility, browser persistence and deploy
+- **Status:** in_progress
 
 ## Decisions Made
 | Decision | Rationale |

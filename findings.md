@@ -13,3 +13,6 @@
 - 用户指定域名 feedback.yychuiyan.com，开始配置 GitHub Pages CNAME 和 Worker 来源。
 
 - 专用 GitHub token 已生效，生产环境匿名提交链路验收通过。当前正式域名 https://feedback.yychuiyan.com/ 。
+
+- 新需求：移动适配、唯一标识和昵称记忆。保留服务端 UUID 作为反馈主键；新增客户端浏览器 UUID 与选填昵称，本地 localStorage 记忆，每次提交写入 MD，兼容旧记录。
+- 昵称及访客标识仅作区分，无法验证身份；跨设备、无痕或清除存储后不恢复。

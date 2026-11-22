@@ -36,11 +36,16 @@ test('anonymous POST forces pending status and saves uploaded bytes',async(t)=>{
     if(url.endsWith('/git/commits/parent'))return Response.json({tree:{sha:'base'}});
     return Response.json({sha:'saved'});
   });
-  const form=new FormData();form.set('description','真实的多行描述\n第二行');form.set('type','问题');form.set('status','已解决');form.set('reason','客户端伪造');form.append('attachments',new Blob(['test attachment']),'日志.txt');
+  const form=new FormData();form.set('description','真实的多行描述\n第二行');form.set('type','问题');form.set('status','已解决');form.set('reason','客户端伪造');form.set('nickname','  小雨  ');form.set('visitorId','11111111-1111-4111-8111-111111111111');form.append('attachments',new Blob(['test attachment']),'日志.txt');
   const response=await worker.fetch(new Request('https://api.example.com/feedback',{method:'POST',headers:{Origin:'https://example.com'},body:form}),env);
   assert.equal(response.status,201);const saved=await response.json();
-  assert.equal(saved.status,'待处理');assert.equal(saved.reason,'');assert.equal(saved.attachments[0].name,'日志.txt');
+  assert.equal(saved.status,'待处理');assert.equal(saved.reason,'');assert.equal(saved.nickname,'小雨');assert.equal(saved.visitorId,'11111111-1111-4111-8111-111111111111');assert.equal(saved.attachments[0].name,'日志.txt');
   const markdown=calls.find(c=>c.data?.encoding==='utf-8').data.content;
   assert.deepEqual(fromMarkdown(markdown),saved);
   assert.equal(atob(calls.find(c=>c.data?.encoding==='base64').data.content),'test attachment');
+});
+
+test('rejects malformed visitor ID and oversized nickname',async()=>{
+ assert.equal((await worker.fetch(request({visitorId:'invalid'}),env)).status,400);
+ assert.equal((await worker.fetch(request({nickname:'a'.repeat(21)}),env)).status,400);
 });
