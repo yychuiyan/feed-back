@@ -1,4 +1,4 @@
 window.FEEDBACK_CONFIG = {
-  apiUrl: '',
+  apiUrl: 'https://feed-back-api.yychuiyan.workers.dev',
   repository: 'yychuiyan/feed-back'
 };
