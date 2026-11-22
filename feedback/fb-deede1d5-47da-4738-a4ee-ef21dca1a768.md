@@ -5,7 +5,7 @@
   "site": "寻巷",
   "nickname": "夜雨炊烟",
   "visitorId": "08bcf7fd-1fe0-4e88-8ad0-5f07390098e4",
-  "status": "待处理",
+  "status": "已解决",
   "reason": "",
   "createdAt": "2026-11-22T13:03:53.782Z",
   "attachments": [
