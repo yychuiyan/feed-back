@@ -28,3 +28,19 @@ test('commits markdown and attachment atomically and retries concurrent update',
   assert.equal(calls.filter(c=>c.method==='PATCH')[1].data.force,false);
   assert.deepEqual(calls.filter(c=>c.url.endsWith('/git/commits'))[1].data.parents,['parent-1']);
 });
+test('anonymous POST forces pending status and saves uploaded bytes',async(t)=>{
+  const calls=[];
+  t.mock.method(globalThis,'fetch',async(url,init)=>{
+    const data=init.body?JSON.parse(init.body):null;calls.push({url,data});
+    if(url.includes('/git/ref/'))return Response.json({object:{sha:'parent'}});
+    if(url.endsWith('/git/commits/parent'))return Response.json({tree:{sha:'base'}});
+    return Response.json({sha:'saved'});
+  });
+  const form=new FormData();form.set('description','真实的多行描述\n第二行');form.set('type','问题');form.set('status','已解决');form.set('reason','客户端伪造');form.append('attachments',new Blob(['test attachment']),'日志.txt');
+  const response=await worker.fetch(new Request('https://api.example.com/feedback',{method:'POST',headers:{Origin:'https://example.com'},body:form}),env);
+  assert.equal(response.status,201);const saved=await response.json();
+  assert.equal(saved.status,'待处理');assert.equal(saved.reason,'');assert.equal(saved.attachments[0].name,'日志.txt');
+  const markdown=calls.find(c=>c.data?.encoding==='utf-8').data.content;
+  assert.deepEqual(fromMarkdown(markdown),saved);
+  assert.equal(atob(calls.find(c=>c.data?.encoding==='base64').data.content),'test attachment');
+});

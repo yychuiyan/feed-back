@@ -4,38 +4,39 @@
 实现并验证静态反馈站点，支持需求/问题、只读处理结果和最新排序，部署 GitHub Pages。
 
 ## Next Step
-验证页面与服务，发布 GitHub Pages，等待 Cloudflare 登录。
+完成 Pages 验证；匿名提交还需仓库专用 GITHUB_TOKEN Secret，配置后执行真实提交验收。
 
 ## Current Phase
-Phase 4
+Phase 5
 
 ## Phases
 
 ### Phase 1: Requirements & Discovery
-- [ ] Understand user intent
-- [ ] Identify constraints
-- [ ] Document in findings.md
+- [x] Understand user intent
+- [x] Identify constraints
+- [x] Document in findings.md
 - **Status:** complete
 
 ### Phase 2: Planning & Structure
-- [ ] Define approach
-- [ ] Create project structure
+- [x] Define approach
+- [x] Create project structure
 - **Status:** complete
 
 ### Phase 3: Implementation
-- [ ] Execute the plan
-- [ ] Write to files before executing
+- [x] Execute the plan
+- [x] Write to files before executing
 - **Status:** complete
 
 ### Phase 4: Testing & Verification
-- [ ] Verify requirements met
-- [ ] Document test results
-- **Status:** in_progress
+- [x] Verify requirements met
+- [x] Document test results
+- **Status:** complete
 
 ### Phase 5: Delivery
-- [ ] Review outputs
+- [x] Review outputs
+- [ ] Configure dedicated GitHub token and verify production submission
 - [ ] Deliver to user
-- **Status:** pending
+- **Status:** in_progress
 
 ## Decisions Made
 | Decision | Rationale |
