@@ -4,6 +4,9 @@
   "main": "server/worker.mjs",
   "compatibility_date": "2026-11-22",
   "workers_dev": true,
+  "routes": [
+    {"pattern": "feedback.yychuiyan.com/feedback", "zone_name": "yychuiyan.com"}
+  ],
   "vars": {
     "GITHUB_REPOSITORY": "yychuiyan/feed-back",
     "GITHUB_BRANCH": "main",

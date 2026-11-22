@@ -80,6 +80,18 @@ Complete
 - [x] Verify desktop/mobile layout, empty results and unchanged picker behavior
 - **Status:** complete
 
+### Phase 13: Automatic image compression
+- [x] Resize large screenshots and photos in the browser before upload
+- [x] Prefer WebP while preserving PDFs, text files, ZIPs and GIFs
+- [x] Show before/after sizes and verify preview quality and mobile layout
+- **Status:** complete
+
+### Phase 14: Reliable submission route
+- [x] Serve `/feedback` from the same Cloudflare domain as the static site
+- [x] Remove browser dependency on `workers.dev`
+- [x] Verify production submission latency and remove diagnostic records
+- **Status:** complete
+
 ## Decisions Made
 | Decision | Rationale |
 |----------|-----------|

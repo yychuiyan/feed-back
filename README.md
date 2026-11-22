@@ -12,7 +12,7 @@ GitHub Pages 静态反馈站点，使用 Markdown 保存记录，Cloudflare Work
 - 站点：昵称下方下拉选择拾萤、寻巷、LanternHarness、炊烟小站、线路检测，默认拾萤；随反馈写入 Markdown。旧记录没有所属站点时不补写。
 - 类型：需求、问题、其他；位于站点下方，单独一行下拉。
 - 附件可在提交前或列表内点击预览，图片弹窗查看、PDF 支持翻页、TXT/LOG 显示前 200 KB，ZIP 提供下载；预览不调用第三方文档服务。
-- 附件：位于类型下方，最多 5 个，总计 10 MB；支持 PNG/JPG/WebP/GIF/PDF/TXT/LOG/ZIP。
+- 附件：位于类型下方，最多 5 个，总计 10 MB；支持 PNG/JPG/WebP/GIF/PDF/TXT/LOG/ZIP。超过 1 MB 的 PNG/JPG/WebP 图片会在浏览器内自动缩放至长边 2000px 并优先转为 WebP，PDF、TXT、LOG、ZIP 和 GIF 保持原文件。
 - 提交时服务端强制设置为待处理。网页只展示处理结果，没有修改接口。
 - 反馈按提交时间倒序展示，可筛选处理结果。
 - 反馈记录可按反馈编号、昵称、站点、类型、状态、描述、访客编号、提交时间或附件名查询；输入关键字后点击“查询”或按回车，“清除”恢复全部记录。
@@ -44,7 +44,7 @@ npm run deploy:api
 
 `GITHUB_TOKEN` 使用单独创建的 fine-grained PAT，只授予本仓库 **Contents: Read and write**。不得放进 public、Git 或浏览器配置。
 在 `wrangler.jsonc` 中配置仓库、分支和允许来源（域名需含 https://）。
-将部署返回的 Worker URL 填到 `public/config.js` 的 `apiUrl`，推送 main。
+浏览器通过同域地址 `https://feedback.yychuiyan.com/feedback` 提交，Cloudflare Route 只将 `/feedback` 转给 Worker，静态页面继续由 GitHub Pages 提供；页面不直连 `workers.dev`，避免移动网络下该域名不稳定。
 接口 `POST /feedback` 接收 multipart/form-data，字段为 description、type、attachments；不接受客户端指定的处理结果。`GET /health` 返回配置是否就绪。
 
 服务提供来源校验、每 IP 每分钟约 5 次提交限制、隐藏机器人字段、上传格式及大小校验。来源校验不能阻止脚本伪造请求；如收到垃圾反馈，可再接入 Turnstile。

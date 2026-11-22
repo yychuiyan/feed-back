@@ -1,10 +1,12 @@
 import {loadProfile, rememberProfile} from './profile.js';
 import {matchesQuery} from './search.js';
+import {formatFileSize, optimizeImageFile} from './image-optimization.js';
 const config = window.FEEDBACK_CONFIG;
 const $ = selector => document.querySelector(selector);
-let records = [], files = [], activeStatus = '全部', activeQuery = '', busy = false;
+let records = [], files = [], activeStatus = '全部', activeQuery = '', busy = false, processingFiles = false;
 const maxBytes = 10 * 1024 * 1024;
 const allowed = /\.(png|jpe?g|webp|gif|pdf|txt|log|zip)$/i;
+const compressedSizes = new WeakMap();
 let storage;
 try {storage=window.localStorage;} catch {}
 const profile=loadProfile(storage,()=>crypto.randomUUID());
@@ -176,18 +178,37 @@ async function openPreview(file) {
 }
 function showFiles() {
   $('#file-list').replaceChildren(...files.map((file,index)=>{
-    const li=element('li'); const remove=element('button','remove-file','×'); remove.type='button'; remove.disabled=busy; remove.setAttribute('aria-label',`移除 ${file.name}`); remove.onclick=()=>{files.splice(index,1);showFiles();};
+    const li=element('li'); const remove=element('button','remove-file','×'); remove.type='button'; remove.disabled=busy||processingFiles; remove.setAttribute('aria-label',`移除 ${file.name}`); remove.onclick=()=>{files.splice(index,1);showFiles();};
     const preview=element('button','file-name file-preview-button',file.name);preview.type='button';preview.setAttribute('aria-label',`预览附件 ${file.name}`);preview.onclick=()=>openPreview(file);
-    li.append(preview,element('span','file-size',`${(file.size/1024).toFixed(0)} KB`),remove);return li;
+    const originalSize=compressedSizes.get(file);
+    const sizeText=originalSize?`${formatFileSize(originalSize)} → ${formatFileSize(file.size)}`:formatFileSize(file.size);
+    li.append(preview,element('span',originalSize?'file-size compressed-size':'file-size',sizeText),remove);return li;
   }));
 }
-function addFiles(incoming) {
-  if(busy)return;
-  const next=[...files,...incoming];
-  if(next.length>5)return message('最多上传 5 个附件，请移除部分文件后重试。');
-  if(next.some(f=>!allowed.test(f.name)))return message('请选择图片、PDF、TXT、日志或 ZIP 文件。');
-  if(next.reduce((n,f)=>n+f.size,0)>maxBytes)return message('附件总大小不能超过 10 MB。');
-  files=next;showFiles();message('');
+async function addFiles(incoming) {
+  if(busy||processingFiles)return;
+  if(files.length+incoming.length>5)return message('最多上传 5 个附件，请移除部分文件后重试。');
+  if(incoming.some(f=>!allowed.test(f.name)))return message('请选择图片、PDF、TXT、日志或 ZIP 文件。');
+  processingFiles=true;$('#submit-button').disabled=true;
+  message('正在自动压缩大图片…','info');
+  try {
+    const optimized=await Promise.all(incoming.map(optimizeImageFile));
+    const next=[...files,...optimized.map(result=>result.file)];
+    if(next.reduce((n,f)=>n+f.size,0)>maxBytes)return message('压缩后的附件总大小仍超过 10 MB，请移除部分文件后重试。');
+    for(const result of optimized){
+      if(result.optimized)compressedSizes.set(result.file,result.originalSize);
+    }
+    files=next;
+    const saved=optimized.reduce((sum,result)=>sum+(result.optimized?result.originalSize-result.file.size:0),0);
+    if(saved>0)message(`已自动压缩图片，减少 ${formatFileSize(saved)}。`,'success');
+    else if(optimized.some(result=>result.failed))message('部分图片无法自动压缩，已保留原文件。','info');
+    else message('');
+  } finally {
+    processingFiles=false;
+    $('#submit-button').disabled=busy;
+    $('#submit-button').textContent=busy?'正在提交…':'提交反馈';
+    showFiles();
+  }
 }
 $('#attachments').addEventListener('change',event=>{addFiles([...event.target.files]);event.target.value='';});
 const drop=$('.upload-area');
@@ -260,6 +281,7 @@ for(const button of document.querySelectorAll('.filter'))button.onclick=()=>{act
 $('#refresh').onclick=load;
 $('#feedback-form').addEventListener('submit',async event=>{
   event.preventDefault();if(busy)return;
+  if(processingFiles)return message('图片正在压缩，请稍候再提交。','info');
   if(!$('#description').value.trim())return message('请先填写反馈描述。');
   if(!config.apiUrl)return message('匿名提交服务尚未启用，请稍后再试。已填写的内容会保留在当前页面。');
   busy=true;$('#submit-button').disabled=true;$('#submit-button').textContent='正在提交…';showFiles();message('');
