@@ -11,3 +11,5 @@
 - GitHub Pages 的账户已有域名，API 返回 http://docs.yychuiyan.com/feed-back/；需核实访问。
 
 - 用户指定域名 feedback.yychuiyan.com，开始配置 GitHub Pages CNAME 和 Worker 来源。
+
+- 专用 GitHub token 已生效，生产环境匿名提交链路验收通过。当前正式域名 https://feedback.yychuiyan.com/ 。

@@ -4,7 +4,7 @@
 实现并验证静态反馈站点，支持需求/问题、只读处理结果和最新排序，部署 GitHub Pages。
 
 ## Next Step
-完成 Pages 验证；匿名提交还需仓库专用 GITHUB_TOKEN Secret，配置后执行真实提交验收。
+匿名提交、Markdown 与附件持久化、自动发布均已验收，清理测试记录后交付。
 
 ## Current Phase
 Phase 5
@@ -34,9 +34,9 @@ Phase 5
 
 ### Phase 5: Delivery
 - [x] Review outputs
-- [ ] Configure dedicated GitHub token and verify production submission
-- [ ] Deliver to user
-- **Status:** in_progress
+- [x] Configure dedicated GitHub token and verify production submission
+- [x] Deliver to user
+- **Status:** complete
 
 ## Decisions Made
 | Decision | Rationale |
