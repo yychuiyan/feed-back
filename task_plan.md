@@ -4,10 +4,10 @@
 实现并验证静态反馈站点，支持需求/问题、只读处理结果和最新排序，部署 GitHub Pages。
 
 ## Next Step
-用户已授权检查后提交发布；完成验证并发布前端与 Worker。
+已完成发布验收与反馈清理，后续按需维护真实反馈记录。
 
 ## Current Phase
-Phase 11
+Complete
 
 ## Phases
 
@@ -69,10 +69,10 @@ Phase 11
 - **Status:** complete
 
 ### Phase 11: Review and publish
-- [ ] Review pending changes and run clean install, tests, build and Worker checks
-- [ ] Commit and publish frontend and submission API
-- [ ] Verify production submission, previews and cleanup test data
-- **Status:** in_progress
+- [x] Review pending changes and run clean install, tests, build and Worker checks
+- [x] Commit and publish frontend and submission API
+- [x] Verify production submission, previews and cleanup test data
+- **Status:** complete
 
 ## Decisions Made
 | Decision | Rationale |
