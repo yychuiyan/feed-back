@@ -4,7 +4,7 @@
 实现并验证静态反馈站点，支持需求/问题、只读处理结果和最新排序，部署 GitHub Pages。
 
 ## Next Step
-实现昵称记忆、访客标识和反馈编号，检查移动端并发布。
+移动端、昵称记忆和唯一编号已发布并完成线上验证。
 
 ## Current Phase
 Phase 6
@@ -39,10 +39,10 @@ Phase 6
 - **Status:** complete
 
 ### Phase 6: Mobile and visitor identity
-- [ ] Improve narrow-screen form, upload, filters and feedback cards
-- [ ] Add optional remembered nickname, browser visitor UUID and visible feedback ID
-- [ ] Verify compatibility, browser persistence and deploy
-- **Status:** in_progress
+- [x] Improve narrow-screen form, upload, filters and feedback cards
+- [x] Add optional remembered nickname, browser visitor UUID and visible feedback ID
+- [x] Verify compatibility, browser persistence and deploy
+- **Status:** complete
 
 ## Decisions Made
 | Decision | Rationale |
