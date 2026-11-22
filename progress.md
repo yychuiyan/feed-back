@@ -16,3 +16,6 @@
 
 - GitHub Pages 部署成功；https://docs.yychuiyan.com/feed-back/ 返回 HTTP 200，标题正确。
 - 页面和 API 已发布；真实匿名提交等待专用 GitHub token，之后还需执行真实提交验收。
+
+- 绑定 feedback.yychuiyan.com：Pages custom domain 已设置，Cloudflare 已有指向 yychuiyan.github.io 的 CNAME（已代理），无需改 DNS。
+- Worker 新域名来源已部署，代码添加 public/CNAME 固定域名。

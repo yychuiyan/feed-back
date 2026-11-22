@@ -7,7 +7,7 @@
   "vars": {
     "GITHUB_REPOSITORY": "yychuiyan/feed-back",
     "GITHUB_BRANCH": "main",
-    "ALLOWED_ORIGINS": "https://yychuiyan.github.io,https://docs.yychuiyan.com,http://docs.yychuiyan.com,http://127.0.0.1:4173"
+    "ALLOWED_ORIGINS": "https://feedback.yychuiyan.com,https://yychuiyan.github.io,https://docs.yychuiyan.com,http://docs.yychuiyan.com,http://127.0.0.1:4173"
   },
   "ratelimits": [{"name":"SUBMISSION_LIMITER","namespace_id":"1001","simple":{"limit":5,"period":60}}]
 }

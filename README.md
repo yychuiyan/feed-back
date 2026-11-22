@@ -1,5 +1,7 @@
 # 反馈站
 
+访问：https://feedback.yychuiyan.com/
+
 GitHub Pages 静态反馈站点，使用 Markdown 保存记录，Cloudflare Worker 接收匿名提交并将描述与附件原子提交到 GitHub。
 
 ## 使用

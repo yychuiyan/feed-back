@@ -9,3 +9,5 @@
 
 - Cloudflare 登录成功，Worker 已部署 https://feed-back-api.yychuiyan.workers.dev ，等待专用 GitHub token。
 - GitHub Pages 的账户已有域名，API 返回 http://docs.yychuiyan.com/feed-back/；需核实访问。
+
+- 用户指定域名 feedback.yychuiyan.com，开始配置 GitHub Pages CNAME 和 Worker 来源。
